@@ -14,7 +14,7 @@ A modern browser extension that provides real-time content analysis with AI-powe
 ## 🛠️ Tech Stack
 
 - **Frontend**: Vanilla JavaScript, HTML5, CSS3
-- **Backend**: Python Flask + Hugging Face Transformers
+- **Backend**: Python Flask + Hugging Face Transformers (or Node.js Express)
 - **Browser Extension**: Chrome Extension Manifest V3
 - **Styling**: Modern CSS with gradients and animations
 
@@ -29,61 +29,29 @@ A modern browser extension that provides real-time content analysis with AI-powe
 
 ### 2. Set Up the Backend
 
-The extension requires a Python Flask backend for AI analysis. Here's a quick setup:
+The extension requires a backend for AI analysis. You can use either Python Flask or Node.js Express:
+
+#### Option A: Node.js Backend (Recommended for quick setup)
+
+```bash
+# Install Node.js dependencies
+npm install
+
+# Start the server
+node server.js
+```
+
+#### Option B: Python Flask Backend
 
 ```bash
 # Install Python dependencies
 pip install flask transformers torch flask-cors
 
-# Create a simple backend (save as backend.py)
-```
-
-```python
-from flask import Flask, request, jsonify
-from flask_cors import CORS
-from transformers import pipeline
-
-app = Flask(__name__)
-CORS(app)
-
-# Load the toxicity classifier
-classifier = pipeline("text-classification", model="unitary/toxic-bert")
-
-@app.route('/analyze', methods=['POST'])
-def analyze_text():
-    try:
-        data = request.get_json()
-        text = data.get('text', '')
-        
-        if not text:
-            return jsonify({'error': 'No text provided'}), 400
-        
-        # Analyze the text
-        result = classifier(text)[0]
-        
-        # Map the result to our expected format
-        label = 'toxic' if result['label'] == 'LABEL_1' else 'safe'
-        score = result['score']
-        
-        return jsonify({
-            'label': label,
-            'score': score
-        })
-        
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
-```
-
-### 3. Run the Backend
-
-```bash
+# Start the server
 python backend.py
 ```
 
-### 4. Configure the Extension
+### 3. Configure the Extension
 
 1. Click the extension icon in your browser
 2. Update the backend URL to `http://localhost:5000/analyze`
@@ -125,7 +93,7 @@ python backend.py
 ## 🔧 Configuration
 
 ### Backend URL
-Update the backend URL in the popup to point to your Flask server:
+Update the backend URL in the popup to point to your server:
 - Local: `http://localhost:5000/analyze`
 - Ngrok: `https://your-ngrok-url.ngrok.io/analyze`
 
@@ -144,12 +112,12 @@ The extension tracks:
 ## 🚀 Deployment
 
 ### For Production
-1. **Backend**: Deploy Flask app to cloud service (Heroku, AWS, etc.)
+1. **Backend**: Deploy to cloud service (Heroku, AWS, etc.)
 2. **Ngrok**: Use ngrok for local development: `ngrok http 5000`
 3. **Extension**: Update backend URL to production endpoint
 
 ### For Demo
-1. Run Flask backend locally
+1. Run backend locally
 2. Use ngrok to create public URL
 3. Update extension backend URL
 4. Share ngrok URL with team
@@ -178,8 +146,8 @@ The extension tracks:
 4. Check network tab for API calls
 
 ### Backend Issues
-1. Ensure all Python dependencies are installed
-2. Check Flask server logs
+1. Ensure all dependencies are installed
+2. Check server logs
 3. Verify CORS is properly configured
 4. Test API endpoint directly
 
@@ -195,6 +163,10 @@ content-analyzer-pro/
 ├── popup.js             # Popup functionality
 ├── popup.css            # Popup styles
 ├── styles.css           # Content script styles
+├── server.js            # Node.js backend
+├── backend.py           # Python Flask backend
+├── package.json         # Node.js dependencies
+├── requirements.txt     # Python dependencies
 ├── icons/               # Extension icons
 └── README.md           # This file
 ```
