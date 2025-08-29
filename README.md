@@ -34,9 +34,21 @@ The extension requires a backend for AI analysis. You can use either Python Flas
 #### Option A: Node.js Backend (Recommended for quick setup)
 
 ```bash
+# if bash not installed 
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+touch ~/.bashrc
+
+echo 'export NVM_DIR="$HOME/.nvm"
+> [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> ~/.bashrc
+
+source ~/.bashrc
+
+nvm install --lts
+
 # Install Node.js dependencies
 npm install
-
+npm install -g npm@11.5.2  #better to upgrade
 # Start the server
 node server.js
 ```
